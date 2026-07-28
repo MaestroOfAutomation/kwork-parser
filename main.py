@@ -16,6 +16,7 @@ async def fetch_worker(bot: Bot, settings: Settings, category_id: str) -> None:
                 orders: list[dict] = await fetch_new_orders(
                     session=session,
                     category_id=category_id,
+                    timeout_seconds=settings.request_timeout_seconds,
                 )
                 if orders:
                     await send_orders(bot=bot, chat_id=settings.tg_chat_id, orders=orders)
@@ -23,6 +24,7 @@ async def fetch_worker(bot: Bot, settings: Settings, category_id: str) -> None:
                 logger.exception(f"При проверке новых заказов {category_id=} произошла ошибка")
 
             await asyncio.sleep(settings.poll_interval)
+
 
 async def runner() -> None:
     settings = Settings()
@@ -40,6 +42,7 @@ async def runner() -> None:
     ]
 
     await asyncio.gather(*fetch_worker_tasks)
+
 
 if __name__ == "__main__":
     asyncio.run(runner())

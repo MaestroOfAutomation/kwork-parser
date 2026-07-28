@@ -8,6 +8,7 @@ def _format_price(value: int | str) -> str:
     value_int = int(float(value))
     return f"{value_int:,}".replace(",", " ")
 
+
 async def send_orders(bot: Bot, chat_id: int | str, orders: list[dict]) -> None:
     for order in orders:
         title = order["name"]

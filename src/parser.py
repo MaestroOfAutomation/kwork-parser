@@ -10,8 +10,9 @@ SEEN_IDS_BY_CATEGORY_ID: dict[str, set[int]] = defaultdict(set)
 
 
 async def fetch_new_orders(
-    session: aiohttp.ClientSession,
-    category_id: str,
+        session: aiohttp.ClientSession,
+        category_id: str,
+        timeout_seconds: int,
 ) -> list[dict]:
     """
     Возвращает новые заказы (кроме тех, что уже были замечены).
@@ -28,7 +29,7 @@ async def fetch_new_orders(
             url=KWORK_URL,
             data=form,
             headers=HEADERS,
-            timeout=5,
+            timeout=timeout_seconds,
     ) as response:
         response.raise_for_status()
         data = await response.json(loads=orjson.loads)
